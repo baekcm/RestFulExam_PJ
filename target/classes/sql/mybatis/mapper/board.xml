@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="emp">
+
+	<!-- 
+	<resultMap id="empResultMap" type="EmpDTO">
+		<result column="EMPNO" jdbcType="DECIMAL" property="empno" />
+		<result column="ENAME" jdbcType="VARCHAR" property="ename" />
+		<result column="JOB" jdbcType="VARCHAR" property="job" />
+		<result column="MGR" jdbcType="DECIMAL" property="mgr" />
+		<result column="HIREDATE" jdbcType="VARCHAR" property="hiredate" />
+		<result column="SAL" jdbcType="DECIMAL" property="sal" />
+		<result column="COMM" jdbcType="DECIMAL" property="comm" />
+		<result column="DEPTNO" jdbcType="DECIMAL" property="deptno" />
+	</resultMap>
+	-->
+
+	<select id="getEmpList" resultType="com.rest.exam.dto.EmpDTO">
+	<![CDATA[
+    SELECT
+        empno
+		, ename
+		, job
+		, mgr
+		, hiredate
+		, sal
+		, comm
+		, deptno
+    FROM
+        EMP
+    
+    ]]>
+    </select>
+    
+    <insert id="addEmp" parameterType="com.rest.exam.dto.EmpDTO">
+    INSERT INTO EMP
+    (empno, ename, job, mgr, hiredate, sal, comm, deptno)
+    VALUES
+    ( (SELECT MAX(empno) + 1 AS empno from EMP), #{ename}, #{job}, #{mgr}, SYSDATE, #{sal}, #{comm}, #{deptno} )
+    </insert>
+
+    <select id="getEmpView" parameterType="object" resultType="com.rest.exam.dto.EmpDTO">
+    <![CDATA[
+    SELECT
+        empno
+		, ename
+		, job
+		, mgr
+		, hiredate
+		, sal
+		, comm
+		, deptno
+    FROM
+        EMP
+    WHERE empno = #{empno}
+    ]]>
+    </select>
+    
+    <update id="modifyEmp" parameterType="com.rest.exam.dto.EmpDTO">
+    <![CDATA[
+    UPDATE
+    	EMP
+    SET job = #{job}, mgr = #{mgr}, sal = #{sal}
+    WHERE empno = #{empno}
+    ]]>
+    </update>
+    
+    <delete id="deleteEmp" parameterType="object">
+    <![CDATA[
+    	DELETE FROM EMP WHERE empno = #{empno}
+    ]]>
+    </delete>
+    
+</mapper>
